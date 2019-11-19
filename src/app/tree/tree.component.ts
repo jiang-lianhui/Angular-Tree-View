@@ -122,14 +122,11 @@ export class TreeComponent implements OnInit {
     if (node.selected !== undefined) {
       if (node.selected === false) {
         node.selected = true;
-        event.srcElement.style.backgroundColor = '#c2c2c2';
       } else {
         node.selected = false;
-        event.srcElement.style.backgroundColor = '#ffffff';
       }
     } else {
       node.selected = true;
-      event.srcElement.style.backgroundColor = '#c2c2c2';
     }
     event.stopPropagation();
   }
