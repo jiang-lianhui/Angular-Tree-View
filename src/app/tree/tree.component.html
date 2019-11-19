@@ -12,8 +12,8 @@
                     <li class="mat-tree-node">
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
-                        <label (click)="selectChildNode($event, node)" [ngStyle]="{'background-color': (node.searched === true) ? '#11e3e3' : 'white'}">
-                            <mat-checkbox>{{node.name}}</mat-checkbox>
+                        <label [ngStyle]="{'background-color': (node.searched === true) ? '#11e3e3' : 'white'}">
+                            <mat-checkbox [checked]="node.selected" (change)="selectChildNodeFrom(node)">{{node.name}}</mat-checkbox>
                         </label>
                     </li>
                 </mat-tree-node>
@@ -27,8 +27,8 @@
                         {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                         </mat-icon>
                     </button>
-                    <label (click)="selectChildNode($event, node)" [ngStyle]="{'background-color': (node.searched === true) ? '#11e3e3' : 'white'}">
-                        <mat-checkbox>{{node.name}}</mat-checkbox>
+                    <label [ngStyle]="{'background-color': (node.searched === true) ? '#11e3e3' : 'white'}">
+                        <mat-checkbox [checked]="node.selected" (change)="selectChildNodeFrom(node)">{{node.name}}</mat-checkbox>
                     </label>
                     </div>
                     <ul [class.tree-view-invisible]="!treeControl.isExpanded(node)">
@@ -56,8 +56,8 @@
                     <li class="mat-tree-node">
                         <!-- use a disabled button to provide padding for tree leaf -->
                         <button mat-icon-button disabled></button>
-                        <label (click)="selectChildNode($event, node)">
-                            <mat-checkbox>{{node.name}}</mat-checkbox>
+                        <label (click)="selectChildNodeTo($event, node)">
+                            <mat-checkbox [(ngModel)]="node.selected" (click)="selectChildNodeTo($event, node)">{{node.name}}</mat-checkbox>
                         </label>
                     </li>
                 </mat-tree-node>
@@ -71,8 +71,8 @@
                         {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                         </mat-icon>
                     </button>
-                    <label (click)="selectChildNode($event, node)">
-                        <mat-checkbox>{{node.name}}</mat-checkbox>
+                    <label (click)="selectChildNodeTo($event, node)">
+                        <mat-checkbox [(ngModel)]="node.selected" (click)="selectChildNodeTo($event, node)">{{node.name}}</mat-checkbox>
                     </label>
                     </div>
                     <ul [class.tree-view-invisible]="!treeControl.isExpanded(node)">

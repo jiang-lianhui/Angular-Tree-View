@@ -118,17 +118,68 @@ export class TreeComponent implements OnInit {
     }
   }
 
-  selectChildNode(event: any, node: any) {
-    if (node.selected !== undefined) {
-      if (node.selected === false) {
-        node.selected = true;
-      } else {
-        node.selected = false;
+  selectChildNodeFrom(node: any) {
+    setTimeout(() => {
+      this.fromDataSource.data = this.selectChild(node, this.fromDataSource.data);
+    }, 0);
+  }
+
+  selectChildNodeTo(event: any, node: any) {
+    setTimeout(() => {
+      this.toDataSource.data = this.selectChild(node, this.toDataSource.data);
+    }, 0);
+  }
+
+  selectChild(node, data) {
+    if (node.selected === false) {
+      node.selected = true;
+      if ('children' in node) {
+        this.selectChildren(node, true);
       }
+    } else if (node.selected === true) {
+      node.selected = false;
+      if ('children' in node) {
+        this.selectChildren(node, false);
+      }
+      for (let i=0; i<data.length; i++) {
+        if (this.unSelectParent(data[i], node) === true) {
+          break;
+        }
+      }
+      console.log(data);
     } else {
       node.selected = true;
+      if ('children' in node) {
+        this.selectChildren(node, true);
+      }
     }
-    event.stopPropagation();
+    return data;
+  }
+
+  unSelectParent(parentNode, node) {
+    if (parentNode.name === node.name) {
+      parentNode.selected = false;
+      return true;
+    }
+    if ('children' in parentNode) {
+      for (let i=0; i<parentNode.children.length; i++) {
+        if (this.unSelectParent(parentNode.children[i], node)) {
+          parentNode.selected = false;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  selectChildren(root, state: boolean) {
+      for (let i=0; i<root.children.length; i++) {
+        let node = root.children[i];
+        node.selected = state;
+        if ('children' in node) {
+          this.selectChildren(node, state);
+        }
+      }
   }
 
   searchTree(event: KeyboardEvent) {
