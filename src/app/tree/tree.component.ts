@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
-var _ = require('lodash');
-
 @Component({
   selector: 'app-tree',
   templateUrl: './tree.component.html',
@@ -27,6 +25,7 @@ export class TreeComponent implements OnInit {
 
   addToList() {
     let temp = JSON.parse(JSON.stringify(this.fromDataSource.data)), filtered = [];
+    console.log(temp);
     for (let i = 0; i < temp.length; i++) {
       this.removeUnselected(temp[i]);
       if (temp[i].children.length !== 0) {
@@ -37,6 +36,11 @@ export class TreeComponent implements OnInit {
   }
 
   removeUnselected(root) {
+    if (root.selected === true) {
+      root.selected = false;
+      return;
+    }
+
     if ("children" in root) {
       let children = root.children;
       let len = children.length;
@@ -45,9 +49,16 @@ export class TreeComponent implements OnInit {
         let child = children[i];
         if ("children" in child) {
           // this is not a leaf
-          this.removeUnselected(child);
-          if (child.children.length !== 0) {
+          if (child.selected === true) {
+            child.selected = false;
             newChildren.push(child);
+          }
+          else {
+            this.removeUnselected(child);
+            if (child.children.length !== 0) {
+              child.selected == false;
+              newChildren.push(child);
+            }
           }
         }
         else {
@@ -65,6 +76,9 @@ export class TreeComponent implements OnInit {
   removeToList() {
     let temp = JSON.parse(JSON.stringify(this.toDataSource.data)), filtered = [];
     for (let i = 0; i < temp.length; i++) {
+      if (temp[i].selected === true)
+        continue;
+
       this.removeSelected(temp[i]);
       if (temp[i].children.length !== 0) {
         filtered.push(temp[i]);
@@ -82,9 +96,14 @@ export class TreeComponent implements OnInit {
         let child = children[i];
         if ("children" in child) {
           // this is not a leaf
-          this.removeSelected(child);
-          if (child.children.length !== 0) {
-            newChildren.push(child);
+          if (child.selected === true)
+            continue;
+
+          else {
+            this.removeSelected(child);
+            if (child.children.length !== 0) {
+              newChildren.push(child);
+            }
           }
         }
         else {
@@ -111,6 +130,7 @@ export class TreeComponent implements OnInit {
       node.selected = true;
       event.srcElement.style.backgroundColor = '#c2c2c2';
     }
+    event.stopPropagation();
   }
 
   searchTree(event: KeyboardEvent) {
@@ -154,6 +174,8 @@ export class TreeComponent implements OnInit {
       root.children = newChildren;
     }
   }
+
+  showToList() {}
 
   hasChild = (_: number, node: any) => !!node.children && node.children.length > 0;
 

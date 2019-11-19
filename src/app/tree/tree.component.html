@@ -16,7 +16,7 @@
                     </li>
                 </mat-tree-node>
                 <!-- This is the tree node template for expandable nodes -->
-                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="selectChildNode($event, node)">
                 <li>
                     <div class="mat-tree-node">
                     <button mat-icon-button matTreeNodeToggle
@@ -39,7 +39,10 @@
                 <button mat-raised-button class="btn btn-primary" color="primary" style="width: 100%; text-align: center;" (click)="addToList()">Add</button>
             </div>
             <div class="button">
-                <button mat-raised-button class="btn btn-info" color="primary" style="width: 100%; text-align: center;" (click)="removeToList()">Remove</button>
+                <button mat-raised-button class="btn btn-primary" color="warn" style="width: 100%; text-align: center;" (click)="removeToList()">Remove</button>
+            </div>
+            <div class="button">
+                <button mat-raised-button class="btn btn-primary" color="accent" style="width: 100%; text-align: center;" (click)="showToList()">Show</button>
             </div>
         </div>
         <div class="col-sm-5">
@@ -53,7 +56,7 @@
                     </li>
                 </mat-tree-node>
                 <!-- This is the tree node template for expandable nodes -->
-                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild" (click)="selectChildNode($event, node)">
                 <li>
                     <div class="mat-tree-node">
                     <button mat-icon-button matTreeNodeToggle
